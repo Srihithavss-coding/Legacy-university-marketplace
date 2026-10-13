@@ -1,4 +1,4 @@
-export const CONDITIONS = ['Brand New', 'Like New', 'Gently Used', 'Heavy Wear'];
+export const CONDITIONS = ['Brand New', 'Like New', 'Good', 'Fair'];
 
 export const LAB_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 

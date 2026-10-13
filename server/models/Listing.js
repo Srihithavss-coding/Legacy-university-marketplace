@@ -1,15 +1,16 @@
 import mongoose from "mongoose";
 import { CONDITIONS, GEAR_TYPES, LAB_SIZES, PRODUCT_CATEGORY_PATHS } from "../utils/listing.js";
 
-const productSchema = new mongoose.Schema({
+const listingSchema = new mongoose.Schema({
     name: {type: String, required: true },
     description: {type: Array, required: true},
     price: {type: Number, required: true },
-    offerPrice: {type: Number, required: true },
     image: {type: Array, required: true },
     category: {type: String, required: true, enum: PRODUCT_CATEGORY_PATHS },
     campus: {type: String, required: true },
     condition: {type: String, required: true, enum: CONDITIONS },
+    sellerId: {type: String, required: true, ref: 'user'},
+    status: {type: String, enum: ['ACTIVE', 'SOLD', 'RESERVED'], default: 'ACTIVE'},
     author: {type: String},
     edition: {type: String},
     courseCode: {type: String},
@@ -21,9 +22,8 @@ const productSchema = new mongoose.Schema({
     bicycleBrand: {type: String},
     gearType: {type: String, enum: GEAR_TYPES },
     lockIncluded: {type: Boolean},
-    inStock: {type: Boolean, default: true },
 }, { timestamps: true})
 
-const Product = mongoose.models.product || mongoose.model('product', productSchema)
+const Listing = mongoose.models.listing || mongoose.model('listing', listingSchema)
 
-export default Product
+export default Listing

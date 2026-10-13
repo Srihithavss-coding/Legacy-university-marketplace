@@ -11,7 +11,7 @@ const ProductCategory = () => {
 
     const searchCategory = categories.find((item)=> item.path.toLowerCase() === category)
 
-    const filteredProducts = products.filter((product)=>product.category.toLowerCase() === category)
+    const filteredProducts = products.filter((product)=>product.category.toLowerCase() === category && product.status !== 'SOLD')
 
   return (
     <div className='mt-16'>
@@ -29,7 +29,7 @@ const ProductCategory = () => {
         </div>
       ): (
         <div className='flex items-center justify-center h-[60vh]'>
-            <p className='text-2xl font-medium text-primary'>No products found in this category.</p>
+            <p className='text-2xl font-medium text-primary'>No listings found in this category.</p>
         </div>
       )}
     </div>

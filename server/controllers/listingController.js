@@ -1,8 +1,8 @@
 import { v2 as cloudinary } from "cloudinary"
-import Product from "../models/Product.js"
+import Listing from "../models/Listing.js"
 import { buildListingPayload, validateListingPayload } from "../utils/listing.js"
 
-// Add Product : /api/product/add
+// Add Listing : /api/product/add
 export const addProduct = async (req, res)=>{
     try {
         let productData = JSON.parse(req.body.productData)
@@ -25,12 +25,12 @@ export const addProduct = async (req, res)=>{
             })
         )
 
-        await Product.create({
+        await Listing.create({
             ...payload,
             image: imagesUrl
         })
 
-        res.json({success: true, message: "Product Added"})
+        res.json({success: true, message: "Listing Added"})
 
     } catch (error) {
         console.log(error.message);
@@ -38,10 +38,10 @@ export const addProduct = async (req, res)=>{
     }
 }
 
-// Get Product : /api/product/list
+// Get Listings : /api/product/list
 export const productList = async (req, res)=>{
     try {
-        const products = await Product.find({})
+        const products = await Listing.find({})
         res.json({success: true, products})
     } catch (error) {
         console.log(error.message);
@@ -49,11 +49,11 @@ export const productList = async (req, res)=>{
     }
 }
 
-// Get single Product : /api/product/id
+// Get single Listing : /api/product/id
 export const productById = async (req, res)=>{
     try {
         const { id } = req.body
-        const product = await Product.findById(id)
+        const product = await Listing.findById(id)
         res.json({success: true, product})
     } catch (error) {
         console.log(error.message);
@@ -61,12 +61,12 @@ export const productById = async (req, res)=>{
     }
 }
 
-// Change Product inStock : /api/product/stock
+// Change Listing status : /api/product/stock
 export const changeStock = async (req, res)=>{
     try {
-        const { id, inStock } = req.body
-        await Product.findByIdAndUpdate(id, {inStock})
-        res.json({success: true, message: "Stock Updated"})
+        const { id, status } = req.body
+        await Listing.findByIdAndUpdate(id, {status})
+        res.json({success: true, message: "Status Updated"})
     } catch (error) {
         console.log(error.message);
         res.json({ success: false, message: error.message })

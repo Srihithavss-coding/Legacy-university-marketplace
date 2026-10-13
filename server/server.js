@@ -6,10 +6,11 @@ import 'dotenv/config';
 import userRouter from './routes/userRoute.js';
 import sellerRouter from './routes/sellerRoute.js';
 import connectCloudinary from './configs/cloudinary.js';
-import productRouter from './routes/productRoute.js';
+import listingRouter from './routes/listingRoute.js';
 import cartRouter from './routes/cartRoute.js';
 import addressRouter from './routes/addressRoute.js';
 import orderRouter from './routes/orderRoute.js';
+import messageRouter from './routes/messageRoute.js';
 import { stripeWebhooks } from './controllers/orderController.js';
 
 const app = express();
@@ -32,10 +33,11 @@ app.use(cors({origin: allowedOrigins, credentials: true}));
 app.get('/', (req, res) => res.send("API is Working"));
 app.use('/api/user', userRouter)
 app.use('/api/seller', sellerRouter)
-app.use('/api/product', productRouter)
+app.use('/api/product', listingRouter)
 app.use('/api/cart', cartRouter)
 app.use('/api/address', addressRouter)
 app.use('/api/order', orderRouter)
+app.use('/api/message', messageRouter)
 
 app.listen(port, ()=>{
     console.log(`Server is running on http://localhost:${port}`)

@@ -15,7 +15,6 @@ const AddProduct = () => {
     const [campus, setCampus] = useState('');
     const [condition, setCondition] = useState('');
     const [price, setPrice] = useState('');
-    const [offerPrice, setOfferPrice] = useState('');
     const [author, setAuthor] = useState('');
     const [edition, setEdition] = useState('');
     const [courseCode, setCourseCode] = useState('');
@@ -41,7 +40,6 @@ const AddProduct = () => {
         setCampus(user?.campus || '');
         setCondition('');
         setPrice('');
-        setOfferPrice('');
         setAuthor('');
         setEdition('');
         setCourseCode('');
@@ -84,7 +82,6 @@ const AddProduct = () => {
                 campus: campus.trim(),
                 condition,
                 price,
-                offerPrice,
                 author,
                 edition,
                 courseCode,
@@ -257,14 +254,9 @@ const AddProduct = () => {
 
                 <div className="flex items-center gap-5 flex-wrap">
                     <div className="flex-1 flex flex-col gap-1 w-32">
-                        <label className="text-base font-medium" htmlFor="product-price">Product Price</label>
+                        <label className="text-base font-medium" htmlFor="product-price">Price (₹)</label>
                         <input onChange={(e)=> setPrice(e.target.value)} value={price}
                          id="product-price" type="number" placeholder="0" className={fieldClass} required />
-                    </div>
-                    <div className="flex-1 flex flex-col gap-1 w-32">
-                        <label className="text-base font-medium" htmlFor="offer-price">Offer Price</label>
-                        <input onChange={(e)=> setOfferPrice(e.target.value)} value={offerPrice} 
-                        id="offer-price" type="number" placeholder="0" className={fieldClass} required />
                     </div>
                 </div>
                 <button className="px-8 py-2.5 bg-primary text-white font-medium rounded cursor-pointer">ADD</button>

@@ -1,5 +1,5 @@
 import Order from "../models/Order.js";
-import Product from "../models/Product.js";
+import Listing from "../models/Listing.js";
 import stripe from "stripe"
 import User from "../models/User.js"
 
@@ -12,8 +12,8 @@ export const placeOrderCOD = async (req, res)=>{
         }
         // Calculate Amount Using Items
         let amount = await items.reduce(async (acc, item)=>{
-            const product = await Product.findById(item.product);
-            return (await acc) + product.offerPrice * item.quantity;
+            const listing = await Listing.findById(item.listing);
+            return (await acc) + listing.price * item.quantity;
         }, 0)
 
         // Add Tax Charge (2%)
@@ -47,13 +47,13 @@ export const placeOrderStripe = async (req, res)=>{
 
         // Calculate Amount Using Items
         let amount = await items.reduce(async (acc, item)=>{
-            const product = await Product.findById(item.product);
+            const listing = await Listing.findById(item.listing);
             productData.push({
-                name: product.name,
-                price: product.offerPrice,
+                name: listing.name,
+                price: listing.price,
                 quantity: item.quantity,
             });
-            return (await acc) + product.offerPrice * item.quantity;
+            return (await acc) + listing.price * item.quantity;
         }, 0)
 
         // Add Tax Charge (2%)
@@ -67,7 +67,7 @@ export const placeOrderStripe = async (req, res)=>{
             paymentType: "Online",
         });
 
-    // Stripe Gateway Initialize    
+    // Stripe Gateway Initialize
     const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
 
     // create line items for stripe
@@ -151,8 +151,8 @@ export const stripeWebhooks = async (request, response)=>{
             await Order.findByIdAndDelete(orderId);
             break;
         }
-            
-    
+
+
         default:
             console.error(`Unhandled event type ${event.type}`)
             break;
@@ -168,7 +168,7 @@ export const getUserOrders = async (req, res)=>{
         const orders = await Order.find({
             userId,
             $or: [{paymentType: "COD"}, {isPaid: true}]
-        }).populate("items.product address").sort({createdAt: -1});
+        }).populate("items.listing address").sort({createdAt: -1});
         res.json({ success: true, orders });
     } catch (error) {
         res.json({ success: false, message: error.message });
@@ -181,7 +181,7 @@ export const getAllOrders = async (req, res)=>{
     try {
         const orders = await Order.find({
             $or: [{paymentType: "COD"}, {isPaid: true}]
-        }).populate("items.product address").sort({createdAt: -1});
+        }).populate("items.listing address").sort({createdAt: -1});
         res.json({ success: true, orders });
     } catch (error) {
         res.json({ success: false, message: error.message });
