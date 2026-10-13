@@ -7,8 +7,10 @@ const publicUser = (user) => ({
     _id: user._id,
     name: user.name,
     email: user.email,
+    universityEmail: user.universityEmail,
     campus: user.campus,
     department: user.department,
+    verifiedStatus: user.verifiedStatus,
 })
 
 const setAuthCookie = (res, userId) => {
@@ -25,17 +27,17 @@ const setAuthCookie = (res, userId) => {
 // Register User : /api/user/register
 export const register = async (req, res)=>{
     try {
-        const { name, email, password, campus, department } = req.body;
+        const { name, email, universityEmail, password, campus, department } = req.body;
 
-        if(!name || !email || !password || !campus || !department){
+        if(!name || !email || !universityEmail || !password || !campus || !department){
             return res.json({success: false, message: 'Missing Details'})
         }
 
-        if(!isUniversityEmail(email)){
+        if(!isUniversityEmail(universityEmail)){
             return res.json({success: false, message: universityEmailErrorMessage()})
         }
 
-        const existingUser = await User.findOne({email})
+        const existingUser = await User.findOne({$or: [{email}, {universityEmail}]})
 
         if(existingUser)
             return res.json({success: false, message: 'User already exists'})
@@ -45,9 +47,11 @@ export const register = async (req, res)=>{
         const user = await User.create({
             name,
             email: email.trim().toLowerCase(),
+            universityEmail: universityEmail.trim().toLowerCase(),
             password: hashedPassword,
             campus: campus.trim(),
             department: department.trim(),
+            verifiedStatus: 'PENDING',
         })
 
         setAuthCookie(res, user._id)

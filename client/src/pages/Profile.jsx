@@ -18,7 +18,8 @@ const Profile = () => {
 
     const fields = [
         { label: 'Full name', value: user.name },
-        { label: 'University email', value: user.email },
+        { label: 'Login email', value: user.email },
+        { label: 'University email', value: user.universityEmail },
         { label: 'Campus / Hostel', value: user.campus, verified: true },
         { label: 'Academic department', value: user.department },
     ]
@@ -36,11 +37,22 @@ const Profile = () => {
                         <p className='text-xl font-semibold text-gray-800'>{user.name}</p>
                         <p className='text-sm text-gray-500 mt-1'>{user.email}</p>
                     </div>
-                    {user.campus && (
-                        <span className='shrink-0 text-xs font-medium px-3 py-1 rounded-full bg-primary/10 text-primary'>
-                            Campus verified
+                    <div className='flex flex-col items-end gap-2'>
+                        {user.campus && (
+                            <span className='shrink-0 text-xs font-medium px-3 py-1 rounded-full bg-primary/10 text-primary'>
+                                Campus verified
+                            </span>
+                        )}
+                        <span className={`shrink-0 text-xs font-medium px-3 py-1 rounded-full ${
+                            user.verifiedStatus === 'VERIFIED' 
+                                ? 'bg-green-100 text-green-600' 
+                                : user.verifiedStatus === 'REJECTED'
+                                ? 'bg-red-100 text-red-600'
+                                : 'bg-yellow-100 text-yellow-600'
+                        }`}>
+                            {user.verifiedStatus === 'VERIFIED' ? '✓ Email Verified' : user.verifiedStatus === 'REJECTED' ? '✗ Verification Rejected' : '⏳ Verification Pending'}
                         </span>
-                    )}
+                    </div>
                 </div>
 
                 <div className='mt-8 grid gap-5'>

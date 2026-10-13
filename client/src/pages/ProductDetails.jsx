@@ -5,6 +5,7 @@ import { assets } from "../assets/assets";
 import ProductCard from "../components/ProductCard";
 import { getProductHighlights } from "../utils/listing";
 import toast from "react-hot-toast";
+import ChatModal from "../components/ChatModal";
 
 const ProductDetails = () => {
 
@@ -12,6 +13,7 @@ const ProductDetails = () => {
     const {id} = useParams()
     const [relatedProducts, setRelatedProducts] = useState([]);
     const [thumbnail, setThumbnail] = useState(null);
+    const [isChatOpen, setIsChatOpen] = useState(false);
 
     const product = products.find((item)=> item._id === id);
     const highlights = getProductHighlights(product);
@@ -33,8 +35,11 @@ const ProductDetails = () => {
             navigate('/login');
             return;
         }
-        // TODO: Implement messaging system
-        toast.success('Messaging feature coming soon!');
+        if (user._id === product.sellerId) {
+            toast.error('You cannot message yourself!');
+            return;
+        }
+        setIsChatOpen(true);
     };
 
     return product && (
@@ -122,6 +127,13 @@ const ProductDetails = () => {
                 </div>
                 <button onClick={()=> {navigate('/products'); scrollTo(0,0)}} className="mx-auto cursor-pointer px-12 my-16 py-2.5 border rounded text-primary hover:bg-primary/10 transition">See more</button>
             </div>
+
+            <ChatModal
+                isOpen={isChatOpen}
+                onClose={() => setIsChatOpen(false)}
+                listingId={product._id}
+                sellerId={product.sellerId}
+            />
         </div>
     );
 };

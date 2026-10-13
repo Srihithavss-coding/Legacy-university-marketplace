@@ -41,6 +41,7 @@ const Navbar = () => {
         <NavLink to='/'>Home</NavLink>
         <NavLink to='/products'>All Listings</NavLink>
         <NavLink to='/sell'>Sell Item</NavLink>
+        <NavLink to='/messages'>Messages</NavLink>
         <NavLink to='/'>Contact</NavLink>
 
         <div className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full">
@@ -63,6 +64,7 @@ const Navbar = () => {
                 </li>
               )}
               <li onClick={()=> navigate("/profile")} className='p-1.5 pl-3 hover:bg-primary/10 cursor-pointer'>My Profile</li>
+              <li onClick={()=> navigate("/messages")} className='p-1.5 pl-3 hover:bg-primary/10 cursor-pointer'>Messages</li>
               <li onClick={()=> navigate("/my-orders")} className='p-1.5 pl-3 hover:bg-primary/10 cursor-pointer'>My Orders</li>
               <li onClick={logout} className='p-1.5 pl-3 hover:bg-primary/10 cursor-pointer'>Logout</li>
             </ul>
@@ -82,6 +84,7 @@ const Navbar = () => {
         <NavLink to="/" onClick={()=> setOpen(false)}>Home</NavLink>
         <NavLink to="/products" onClick={()=> setOpen(false)}>All Listings</NavLink>
         <NavLink to="/sell" onClick={()=> setOpen(false)}>Sell Item</NavLink>
+        <NavLink to="/messages" onClick={()=> setOpen(false)}>Messages</NavLink>
         {user &&
         <>
         <NavLink to="/profile" onClick={()=> setOpen(false)}>My Profile</NavLink>

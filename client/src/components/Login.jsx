@@ -10,6 +10,7 @@ const Login = () => {
     const [state, setState] = React.useState("login");
     const [name, setName] = React.useState("");
     const [email, setEmail] = React.useState("");
+    const [universityEmail, setUniversityEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [campus, setCampus] = React.useState("");
     const [department, setDepartment] = React.useState("");
@@ -25,14 +26,14 @@ const Login = () => {
                     toast.error("Campus / hostel name and academic department are required.");
                     return;
                 }
-                if (!isUniversityEmail(email)) {
+                if (!isUniversityEmail(universityEmail)) {
                     toast.error(universityEmailErrorMessage());
                     return;
                 }
             }
 
             const {data} = await axios.post(`/api/user/${state}`,{
-                name, email, password, campus, department
+                name, email, universityEmail, password, campus, department
             });
             if (data.success){
                 navigate('/')
@@ -65,6 +66,11 @@ const Login = () => {
                 <div className="w-full">
                     <p>Name</p>
                     <input onChange={(e) => setName(e.target.value)} value={name} placeholder="type here" className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary" type="text" required />
+                </div>
+                <div className="w-full">
+                    <p>University Email (for verification)</p>
+                    <input onChange={(e) => setUniversityEmail(e.target.value)} value={universityEmail} placeholder="name@university.edu" className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary" type="email" required />
+                    <p className="text-xs text-gray-400 mt-1">Must be from your institution ({allowedDomains.join(', ')}).</p>
                 </div>
                 <div className="w-full">
                     <p>Campus / Hostel Name</p>
