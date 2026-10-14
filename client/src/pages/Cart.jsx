@@ -95,7 +95,7 @@ const Cart = () => {
         <div className="flex flex-col md:flex-row mt-16">
             <div className='flex-1 max-w-4xl'>
                 <h1 className="text-3xl font-medium mb-6">
-                    Shopping Cart <span className="text-sm text-primary">{getCartCount()} Items</span>
+                    Your Wishlist <span className="text-sm text-primary">{getCartCount()} Items</span>
                 </h1>
 
                 <div className="grid grid-cols-[2fr_1fr_1fr] text-gray-500 text-base font-medium pb-3">
@@ -115,7 +115,7 @@ const Cart = () => {
                             <div>
                                 <p className="hidden md:block font-semibold">{product.name}</p>
                                 <div className="font-normal text-gray-500/70">
-                                    <p>Weight: <span>{product.weight || "N/A"}</span></p>
+                                    <p>Condition: <span>{product.condition || "N/A"}</span></p>
                                     <div className='flex items-center'>
                                         <p>Qty:</p>
                                         <select onChange={e => updateCartItem(product._id, Number(e.target.value))}  value={cartItems[product._id]} className='outline-none'>
@@ -146,7 +146,7 @@ const Cart = () => {
                 <hr className="border-gray-300 my-5" />
 
                 <div className="mb-6">
-                    <p className="text-sm font-medium uppercase">Delivery Address</p>
+                    <p className="text-sm font-medium uppercase">Pickup/Meeting Address</p>
                     <div className="relative flex justify-between items-start mt-2">
                         <p className="text-gray-500">{selectedAddress ? `${selectedAddress.street}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.country}` : "No address found"}</p>
                         <button onClick={() => setShowAddress(!showAddress)} className="text-primary hover:underline cursor-pointer">
@@ -169,7 +169,7 @@ const Cart = () => {
                     <p className="text-sm font-medium uppercase mt-6">Payment Method</p>
 
                     <select onChange={e => setPaymentOption(e.target.value)} className="w-full border border-gray-300 bg-white px-3 py-2 mt-2 outline-none">
-                        <option value="COD">Cash On Delivery</option>
+                        <option value="COD">Cash On Pickup</option>
                         <option value="Online">Online Payment</option>
                     </select>
                 </div>
@@ -181,7 +181,7 @@ const Cart = () => {
                         <span>Price</span><span>{currency}{getCartAmount()}</span>
                     </p>
                     <p className="flex justify-between">
-                        <span>Shipping Fee</span><span className="text-green-600">Free</span>
+                        <span>Shipping Fee</span><span className="text-blue-600">Free</span>
                     </p>
                     <p className="flex justify-between">
                         <span>Tax (2%)</span><span>{currency}{getCartAmount() * 2 / 100}</span>
@@ -193,7 +193,7 @@ const Cart = () => {
                 </div>
 
                 <button onClick={placeOrder} className="w-full py-3 mt-6 cursor-pointer bg-primary text-white font-medium hover:bg-primary-dull transition">
-                    {paymentOption === "COD" ? "Place Order" : "Proceed to Checkout"}
+                    {paymentOption === "COD" ? "Request Item" : "Proceed to Checkout"}
                 </button>
             </div>
         </div>

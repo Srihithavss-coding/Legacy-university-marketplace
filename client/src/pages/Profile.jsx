@@ -44,8 +44,8 @@ const Profile = () => {
                             </span>
                         )}
                         <span className={`shrink-0 text-xs font-medium px-3 py-1 rounded-full ${
-                            user.verifiedStatus === 'VERIFIED' 
-                                ? 'bg-green-100 text-green-600' 
+                            user.verifiedStatus === 'VERIFIED'
+                                ? 'bg-blue-100 text-blue-600'
                                 : user.verifiedStatus === 'REJECTED'
                                 ? 'bg-red-100 text-red-600'
                                 : 'bg-yellow-100 text-yellow-600'

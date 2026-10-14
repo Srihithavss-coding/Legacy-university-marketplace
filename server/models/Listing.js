@@ -8,7 +8,11 @@ const listingSchema = new mongoose.Schema({
     image: {type: Array, required: true },
     category: {type: String, required: true, enum: PRODUCT_CATEGORY_PATHS },
     campus: {type: String, required: true },
-    condition: {type: String, required: true, enum: CONDITIONS },
+condition: {
+  type: String,
+  enum: ['NEW', 'LIKE_NEW', 'GOOD', 'FAIR', 'Brand New', 'Gently Used', 'Like New', 'Good', 'Fair'],
+  required: true
+},
     sellerId: {type: String, required: true, ref: 'user'},
     status: {type: String, enum: ['ACTIVE', 'SOLD', 'RESERVED'], default: 'ACTIVE'},
     author: {type: String},
