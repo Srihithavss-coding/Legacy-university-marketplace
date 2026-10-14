@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import Listing from "./models/Listing.js";
 import User from "./models/User.js";
 import Message from "./models/Message.js";
+import bcrypt from 'bcryptjs';
 
 dotenv.config();
 
@@ -241,6 +242,10 @@ const sampleUsers = [
   }
 ];
 
+const hashPassword = async (password) => {
+    return await bcrypt.hash(password, 10);
+};
+
 const sampleMessages = [
   // Conversation 1: Data Structures Notes (User 0 asking User 2)
   {
@@ -306,8 +311,16 @@ const seedDatabase = async () => {
     await Message.deleteMany({});
     console.log("Cleared existing data");
 
+    // Hash passwords for sample users
+    const usersWithHashedPasswords = await Promise.all(
+      sampleUsers.map(async (user) => ({
+        ...user,
+        password: await hashPassword(user.password)
+      }))
+    );
+
     // Insert sample users
-    const insertedUsers = await User.insertMany(sampleUsers);
+    const insertedUsers = await User.insertMany(usersWithHashedPasswords);
     console.log(`Inserted ${insertedUsers.length} users`);
 
     // Update sellerIds in listings to match inserted user IDs

@@ -14,8 +14,14 @@ export const addProduct = async (req, res)=>{
             return res.json({success: false, message: validationError})
         }
 
+        // Use userId from auth middleware instead of sellerId from form
+        const sellerId = req.body.userId;
+        if (!sellerId) {
+            return res.json({success: false, message: "Not Authorized"})
+        }
+
         // Check if seller is verified
-        const seller = await User.findById(payload.sellerId);
+        const seller = await User.findById(sellerId);
         if (!seller) {
             return res.json({success: false, message: "Seller not found"})
         }
@@ -37,6 +43,7 @@ export const addProduct = async (req, res)=>{
 
         await Listing.create({
             ...payload,
+            sellerId: sellerId,
             image: imagesUrl
         })
 

@@ -76,7 +76,14 @@ export const login = async (req, res)=>{
             return res.json({success: false, message: 'Email and password are required'});
 
         const normalizedEmail = email.trim().toLowerCase();
-        const user = await User.findOne({email: normalizedEmail});
+
+        // Allow login with either email or universityEmail
+        const user = await User.findOne({
+            $or: [
+                { email: normalizedEmail },
+                { universityEmail: normalizedEmail }
+            ]
+        });
 
         if(!user){
             return res.json({success: false, message: 'Invalid email or password'});
