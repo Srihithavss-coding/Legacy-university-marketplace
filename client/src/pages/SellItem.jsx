@@ -27,15 +27,15 @@ const SellItem = () => {
     const [gearType, setGearType] = useState('');
     const [lockIncluded, setLockIncluded] = useState(false);
 
-    const {axios, fetchProducts, user, navigate} = useAppContext()
+    const {axios, fetchProducts, user, navigate, setShowUserLogin} = useAppContext()
 
     useEffect(() => {
         if (!user) {
-            navigate('/login');
+            setShowUserLogin(true);
             return;
         }
         if (user?.campus) setCampus(user.campus)
-    }, [user, navigate])
+    }, [user, navigate, setShowUserLogin])
 
     const resetForm = () => {
         setName('');

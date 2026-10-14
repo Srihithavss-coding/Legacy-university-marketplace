@@ -33,16 +33,17 @@ const Navbar = () => {
   return (
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
 
-      <NavLink to='/' onClick={()=> setOpen(false)}>
-        <img className="h-9" src={assets.logo} alt="logo" />
+      <NavLink to='/' onClick={()=> setOpen(false)} className="flex items-center gap-2">
+        <div className="w-9 h-9 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-lg">L</div>
+        <span className="text-xl font-bold text-gray-800">Legacy</span>
       </NavLink>
 
       <div className="hidden sm:flex items-center gap-8">
         <NavLink to='/'>Home</NavLink>
         <NavLink to='/products'>All Listings</NavLink>
-        <NavLink to='/sell'>Sell Item</NavLink>
-        <NavLink to='/messages'>Messages</NavLink>
-        <NavLink to='/'>Contact</NavLink>
+        <NavLink to='/sell' onClick={(e) => { if(!user) { e.preventDefault(); setShowUserLogin(true); } }}>Sell Item</NavLink>
+        <NavLink to='/messages' onClick={(e) => { if(!user) { e.preventDefault(); setShowUserLogin(true); } }}>Messages</NavLink>
+        <NavLink to='/contact'>Contact</NavLink>
 
         <div className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full">
           <input onChange={(e)=> setSearchQuery(e.target.value)} className="py-1.5 w-full bg-transparent outline-none placeholder-gray-500" type="text" placeholder="Search listings" />
@@ -65,7 +66,7 @@ const Navbar = () => {
               )}
               <li onClick={()=> navigate("/profile")} className='p-1.5 pl-3 hover:bg-primary/10 cursor-pointer'>My Profile</li>
               <li onClick={()=> navigate("/messages")} className='p-1.5 pl-3 hover:bg-primary/10 cursor-pointer'>Messages</li>
-              <li onClick={()=> navigate("/my-orders")} className='p-1.5 pl-3 hover:bg-primary/10 cursor-pointer'>My Orders</li>
+              <li onClick={()=> navigate("/cart")} className='p-1.5 pl-3 hover:bg-primary/10 cursor-pointer'>My Saved Items</li>
               <li onClick={logout} className='p-1.5 pl-3 hover:bg-primary/10 cursor-pointer'>Logout</li>
             </ul>
           </div>
@@ -83,15 +84,15 @@ const Navbar = () => {
         <div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}>
         <NavLink to="/" onClick={()=> setOpen(false)}>Home</NavLink>
         <NavLink to="/products" onClick={()=> setOpen(false)}>All Listings</NavLink>
-        <NavLink to="/sell" onClick={()=> setOpen(false)}>Sell Item</NavLink>
-        <NavLink to="/messages" onClick={()=> setOpen(false)}>Messages</NavLink>
+        <NavLink to="/sell" onClick={(e) => { if(!user) { e.preventDefault(); setOpen(false); setShowUserLogin(true); } else { setOpen(false); } }}>Sell Item</NavLink>
+        <NavLink to="/messages" onClick={(e) => { if(!user) { e.preventDefault(); setOpen(false); setShowUserLogin(true); } else { setOpen(false); } }}>Messages</NavLink>
         {user &&
         <>
         <NavLink to="/profile" onClick={()=> setOpen(false)}>My Profile</NavLink>
-        <NavLink to="/my-orders" onClick={()=> setOpen(false)}>My Orders</NavLink>
+        <NavLink to="/cart" onClick={()=> setOpen(false)}>My Saved Items</NavLink>
         </>
         }
-        <NavLink to="/" onClick={()=> setOpen(false)}>Contact</NavLink>
+        <NavLink to="/contact" onClick={()=> setOpen(false)}>Contact</NavLink>
 
         {!user ? (
           <button onClick={()=>{

@@ -17,8 +17,15 @@ const Messages = () => {
 
     const fetchConversations = async () => {
         try {
-            // For now, we'll just show a placeholder since we need to implement a conversations endpoint
-            // This would typically fetch all unique conversations for the user
+            const { data } = await axios.post('/api/message/user-conversations', {
+                userId: user._id
+            });
+
+            if (data.success) {
+                setConversations(data.conversations);
+            } else {
+                toast.error(data.message);
+            }
             setLoading(false);
         } catch (error) {
             toast.error('Failed to load conversations');
@@ -73,15 +80,30 @@ const Messages = () => {
                                 onClick={() => setSelectedChat(conv)}
                             >
                                 <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="font-medium">{conv.listingName}</p>
-                                        <p className="text-sm text-gray-500 mt-1">
-                                            {conv.lastMessage}
-                                        </p>
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-bold">
+                                            {conv.otherUser.name.charAt(0)}
+                                        </div>
+                                        <div>
+                                            <p className="font-medium">{conv.listingName}</p>
+                                            <p className="text-sm text-gray-500 mt-1">
+                                                Chat with {conv.otherUser.name}
+                                            </p>
+                                            <p className="text-sm text-gray-400 mt-1 truncate max-w-md">
+                                                {conv.lastMessage}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <span className="text-xs text-gray-400">
-                                        {new Date(conv.lastMessageTime).toLocaleDateString()}
-                                    </span>
+                                    <div className="text-right">
+                                        <span className="text-xs text-gray-400 block">
+                                            {new Date(conv.lastMessageTime).toLocaleDateString()}
+                                        </span>
+                                        {conv.unreadCount > 0 && (
+                                            <span className="inline-block mt-1 px-2 py-0.5 bg-primary text-white text-xs rounded-full">
+                                                {conv.unreadCount}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         ))}
@@ -94,7 +116,10 @@ const Messages = () => {
                     isOpen={!!selectedChat}
                     onClose={() => setSelectedChat(null)}
                     listingId={selectedChat.listingId}
-                    sellerId={selectedChat.sellerId}
+                    listingName={selectedChat.listingName}
+                    listingImage={selectedChat.listingImage}
+                    otherUserId={selectedChat.otherUser._id}
+                    otherUserName={selectedChat.otherUser.name}
                 />
             )}
         </div>

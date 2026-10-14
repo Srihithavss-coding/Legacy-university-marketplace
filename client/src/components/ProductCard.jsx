@@ -29,7 +29,7 @@ const ProductCard = ({product}) => {
                     <p className="md:text-xl text-base font-medium text-primary">
                         {currency}{product.price}
                     </p>
-                    <div onClick={(e) => { e.stopPropagation(); }} className="text-primary">
+                    <div onClick={(e) => { e.stopPropagation(); navigate(`/products/${product.category.toLowerCase()}/${product._id}`); scrollTo(0,0); }} className="text-primary">
                         <button className="flex items-center gap-1 bg-primary/10 border border-primary/40 md:w-[80px] w-[64px] h-[34px] rounded cursor-pointer justify-center" >
                             View
                         </button>

@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import Listing from "./models/Listing.js";
 import User from "./models/User.js";
+import Message from "./models/Message.js";
 
 dotenv.config();
 
@@ -240,6 +241,60 @@ const sampleUsers = [
   }
 ];
 
+const sampleMessages = [
+  // Conversation 1: Data Structures Notes (User 0 asking User 2)
+  {
+    listingId: "will_be_replaced",
+    senderId: "will_be_replaced_buyer",
+    receiverId: "will_be_replaced_seller",
+    message: "Hi, is the Data Structures notes still available?",
+    isRead: true
+  },
+  {
+    listingId: "will_be_replaced",
+    senderId: "will_be_replaced_seller",
+    receiverId: "will_be_replaced_buyer",
+    message: "Yes, it's still available! The notes cover all topics from Arrays to Graphs with detailed examples.",
+    isRead: true
+  },
+  {
+    listingId: "will_be_replaced",
+    senderId: "will_be_replaced_buyer",
+    receiverId: "will_be_replaced_seller",
+    message: "Great! Can we meet tomorrow at the CS department?",
+    isRead: false
+  },
+  // Conversation 2: Campus Bicycle (User 0 asking User 3)
+  {
+    listingId: "will_be_replaced_bike",
+    senderId: "will_be_replaced_buyer",
+    receiverId: "will_be_replaced_seller_bike",
+    message: "Hello, I'm interested in the Hercules bicycle. Is it still available?",
+    isRead: true
+  },
+  {
+    listingId: "will_be_replaced_bike",
+    senderId: "will_be_replaced_seller_bike",
+    receiverId: "will_be_replaced_buyer",
+    message: "Hi! Yes, the bicycle is still available. It's in excellent condition and recently serviced.",
+    isRead: true
+  },
+  {
+    listingId: "will_be_replaced_bike",
+    senderId: "will_be_replaced_buyer",
+    receiverId: "will_be_replaced_seller_bike",
+    message: "Does it come with the lock and helmet as mentioned?",
+    isRead: true
+  },
+  {
+    listingId: "will_be_replaced_bike",
+    senderId: "will_be_replaced_seller_bike",
+    receiverId: "will_be_replaced_buyer",
+    message: "Yes, both lock and helmet are included. You can check it out at Hostel Block A.",
+    isRead: false
+  }
+];
+
 const seedDatabase = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
@@ -248,6 +303,7 @@ const seedDatabase = async () => {
     // Clear existing data
     await Listing.deleteMany({});
     await User.deleteMany({});
+    await Message.deleteMany({});
     console.log("Cleared existing data");
 
     // Insert sample users
@@ -263,6 +319,38 @@ const seedDatabase = async () => {
     // Insert sample listings
     const insertedListings = await Listing.insertMany(listingWithRealIds);
     console.log(`Inserted ${insertedListings.length} listings`);
+
+    // Find specific listings for conversations
+    const dataStructuresListing = insertedListings.find(l => l.name === "Data Structures Handwritten Notes");
+    const bicycleListing = insertedListings.find(l => l.name === "Campus Bicycle - Hercules Geared");
+
+    // Setup message participants
+    const buyerUser = insertedUsers[0]; // Rahul Sharma
+    const sellerUser = insertedUsers[2]; // Amit Kumar (Data Structures seller)
+    const bikeSellerUser = insertedUsers[3]; // Sneha Reddy (Bicycle seller)
+
+    // Create messages with real IDs
+    const messagesWithRealIds = sampleMessages.map((msg) => {
+      if (msg.listingId === "will_be_replaced") {
+        return {
+          ...msg,
+          listingId: dataStructuresListing._id.toString(),
+          senderId: msg.senderId === "will_be_replaced_buyer" ? buyerUser._id.toString() : sellerUser._id.toString(),
+          receiverId: msg.receiverId === "will_be_replaced_buyer" ? buyerUser._id.toString() : sellerUser._id.toString()
+        };
+      } else {
+        return {
+          ...msg,
+          listingId: bicycleListing._id.toString(),
+          senderId: msg.senderId === "will_be_replaced_buyer" ? buyerUser._id.toString() : bikeSellerUser._id.toString(),
+          receiverId: msg.receiverId === "will_be_replaced_buyer" ? buyerUser._id.toString() : bikeSellerUser._id.toString()
+        };
+      }
+    });
+
+    // Insert sample messages
+    const insertedMessages = await Message.insertMany(messagesWithRealIds);
+    console.log(`Inserted ${insertedMessages.length} messages`);
 
     console.log("Database seeded successfully!");
     process.exit(0);

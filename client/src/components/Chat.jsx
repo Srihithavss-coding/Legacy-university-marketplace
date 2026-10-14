@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useAppContext } from '../context/AppContext';
-import { useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
-const Chat = ({ listingId, sellerId, onClose }) => {
+const Chat = ({ listingId, listingName, listingImage, otherUserId, otherUserName, onClose }) => {
     const { user, axios } = useAppContext();
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
@@ -23,13 +22,18 @@ const Chat = ({ listingId, sellerId, onClose }) => {
         // Poll for new messages every 3 seconds
         const interval = setInterval(fetchMessages, 3000);
         return () => clearInterval(interval);
-    }, [listingId]);
+    }, [listingId, otherUserId]);
 
     const fetchMessages = async () => {
         try {
-            const { data } = await axios.get(`/api/message/listing/${listingId}`);
+            const { data } = await axios.post('/api/message/conversation', {
+                userId1: user._id,
+                userId2: otherUserId
+            });
             if (data.success) {
-                setMessages(data.messages);
+                // Filter messages for this specific listing
+                const listingMessages = data.messages.filter(msg => msg.listingId._id === listingId);
+                setMessages(listingMessages);
             }
         } catch (error) {
             console.error('Error fetching messages:', error);
@@ -46,7 +50,7 @@ const Chat = ({ listingId, sellerId, onClose }) => {
             const { data } = await axios.post('/api/message/send', {
                 listingId,
                 senderId: user._id,
-                receiverId: sellerId,
+                receiverId: otherUserId,
                 message: newMessage.trim(),
             });
 
@@ -81,9 +85,14 @@ const Chat = ({ listingId, sellerId, onClose }) => {
         <div className="flex flex-col h-[500px] w-full max-w-2xl mx-auto bg-white rounded-lg shadow-lg">
             {/* Chat Header */}
             <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                <div>
-                    <h3 className="font-semibold text-lg">Chat with Seller</h3>
-                    <p className="text-sm text-gray-500">Listing ID: {listingId.slice(-6)}</p>
+                <div className="flex items-center gap-3">
+                    {listingImage && (
+                        <img src={listingImage} alt={listingName} className="w-10 h-10 object-cover rounded" />
+                    )}
+                    <div>
+                        <h3 className="font-semibold text-lg">{listingName}</h3>
+                        <p className="text-sm text-gray-500">Chat with {otherUserName}</p>
+                    </div>
                 </div>
                 <button
                     onClick={onClose}

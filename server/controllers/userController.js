@@ -37,7 +37,10 @@ export const register = async (req, res)=>{
             return res.json({success: false, message: universityEmailErrorMessage()})
         }
 
-        const existingUser = await User.findOne({$or: [{email}, {universityEmail}]})
+        const normalizedEmail = email.trim().toLowerCase();
+        const normalizedUniversityEmail = universityEmail.trim().toLowerCase();
+
+        const existingUser = await User.findOne({$or: [{email: normalizedEmail}, {universityEmail: normalizedUniversityEmail}]})
 
         if(existingUser)
             return res.json({success: false, message: 'User already exists'})
@@ -46,12 +49,12 @@ export const register = async (req, res)=>{
 
         const user = await User.create({
             name,
-            email: email.trim().toLowerCase(),
-            universityEmail: universityEmail.trim().toLowerCase(),
+            email: normalizedEmail,
+            universityEmail: normalizedUniversityEmail,
             password: hashedPassword,
             campus: campus.trim(),
             department: department.trim(),
-            verifiedStatus: 'PENDING',
+            verifiedStatus: 'VERIFIED', // Auto-verify since university email validation passed
         })
 
         setAuthCookie(res, user._id)
@@ -71,7 +74,9 @@ export const login = async (req, res)=>{
 
         if(!email || !password)
             return res.json({success: false, message: 'Email and password are required'});
-        const user = await User.findOne({email: email.trim().toLowerCase()});
+
+        const normalizedEmail = email.trim().toLowerCase();
+        const user = await User.findOne({email: normalizedEmail});
 
         if(!user){
             return res.json({success: false, message: 'Invalid email or password'});

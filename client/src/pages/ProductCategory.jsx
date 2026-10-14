@@ -1,12 +1,12 @@
 import React from 'react'
 import { useAppContext } from '../context/AppContext'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { categories } from '../assets/assets'
 import ProductCard from '../components/ProductCard'
 
 const ProductCategory = () => {
 
-    const { products } =  useAppContext()
+    const { products, navigate } =  useAppContext()
     const { category } = useParams()
 
     const searchCategory = categories.find((item)=> item.path.toLowerCase() === category)
@@ -15,6 +15,12 @@ const ProductCategory = () => {
 
   return (
     <div className='mt-16'>
+      <div className='flex items-center gap-2 text-sm text-gray-500 mb-4'>
+        <Link to="/" onClick={()=>{navigate('/'); scrollTo(0,0)}} className='hover:text-primary cursor-pointer'>Home</Link>
+        <span>/</span>
+        <span className='text-gray-700 font-medium'>{searchCategory?.text || category}</span>
+      </div>
+
       {searchCategory && (
         <div className='flex flex-col items-end w-max'>
             <p className='text-2xl font-medium'>{searchCategory.text.toUpperCase()}</p>
