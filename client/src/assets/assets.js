@@ -25,50 +25,6 @@ import main_banner_bg_sm from "./main_banner_bg_sm.png";
 import bottom_banner_image from "./bottom_banner_image.png";
 import bottom_banner_image_sm from "./bottom_banner_image_sm.png";
 import add_address_iamge from "./add_address_image.svg";
-import organic_vegitable_image from "./organic_vegitable_image.png";
-import fresh_fruits_image from "./fresh_fruits_image.png";
-import bottles_image from "./bottles_image.png";
-import maggi_image from "./maggi_image.png";
-import dairy_product_image from "./dairy_product_image.png";
-import bakery_image from "./bakery_image.png";
-import grain_image from "./grain_image.png";
-import potato_image_1 from "./potato_image_1.png";
-import potato_image_2 from "./potato_image_2.png";
-import potato_image_3 from "./potato_image_3.png";
-import potato_image_4 from "./potato_image_4.png";
-import tomato_image from "./tomato_image.png";
-import carrot_image from "./carrot_image.png";
-import apple_image from "./apple_image.png";
-import amul_milk_image from "./amul_milk_image.png";
-import coca_cola_image from "./coca_cola_image.png";
-import brown_bread_image from "./brown_bread_image.png";
-import basmati_rice_image from "./basmati_rice_image.png";
-import paneer_image from "./paneer_image.png";
-import orange_image from "./orange_image.png";
-import pepsi_image from "./pepsi_image.png";
-import wheat_flour_image from "./wheat_flour_image.png";
-import cheese_image from "./cheese_image.png";
-import eggs_image from "./eggs_image.png";
-import spinach_image_1 from "./spinach_image_1.png";
-import onion_image_1 from "./onion_image_1.png";
-import banana_image_1 from "./banana_image_1.png";
-import mango_image_1 from "./mango_image_1.png";
-import grapes_image_1 from "./grapes_image_1.png";
-import paneer_image_2 from "./paneer_image_2.png";
-import sprite_image_1 from "./sprite_image_1.png";
-import fanta_image_1 from "./fanta_image_1.png";
-import seven_up_image_1 from "./seven_up_image_1.png";
-import top_ramen_image from "./top_ramen_image.png";
-import knorr_soup_image from "./knorr_soup_image.png";
-import yippee_image from "./yippee_image.png";
-import maggi_oats_image from "./maggi_oats_image.png";
-import butter_croissant_image from "./butter_croissant_image.png";
-import chocolate_cake_image from "./chocolate_cake_image.png";
-import whole_wheat_bread_image from "./whole_wheat_bread_image.png";
-import vanilla_muffins_image from "./vanilla_muffins_image.png";
-import quinoa_image from "./quinoa_image.png";
-import brown_rice_image from "./brown_rice_image.png";
-import barley_image from "./barley_image.png";
 
 export const assets = {
   logo,
@@ -104,31 +60,31 @@ export const categories = [
   {
     text: "Textbooks & Course Materials",
     path: "Textbooks",
-    image: bakery_image,
+    image: box_icon,
     bgColor: "#E8F1FF",
   },
   {
     text: "Lab Equipment & Lab Coats",
     path: "Lab",
-    image: organic_vegitable_image,
+    image: trust_icon,
     bgColor: "#E1F5EC",
   },
   {
     text: "Old Question Papers & Notes",
     path: "Notes",
-    image: grain_image,
+    image: coin_icon,
     bgColor: "#F1E3F9",
   },
   {
     text: "Bicycles & Transport",
     path: "Bicycles",
-    image: bottles_image,
+    image: delivery_truck_icon,
     bgColor: "#FEE6CD",
   },
   {
     text: "Miscellaneous / Dorm Gear",
     path: "Misc",
-    image: maggi_image,
+    image: leaf_icon,
     bgColor: "#FEF6DA",
   },
 ];
@@ -195,7 +151,7 @@ export const dummyProducts = [
     name: "First-year Chemistry Lab Coat",
     category: "Lab",
     price: 350,
-    image: [potato_image_1],
+    image: [trust_icon],
     description: [
       "Brand new lab coat, never used",
       "Standard white cotton lab coat",
@@ -216,7 +172,7 @@ export const dummyProducts = [
     name: "Physics Lab Coat Size L",
     category: "Lab",
     price: 200,
-    image: [tomato_image],
+    image: [trust_icon],
     description: [
       "Used for one semester only",
       "Clean and well-maintained",
@@ -237,7 +193,7 @@ export const dummyProducts = [
     name: "Biology Lab Coat Size S",
     category: "Lab",
     price: 300,
-    image: [carrot_image],
+    image: [trust_icon],
     description: [
       "Biology lab coat, barely used",
       "Size S, fits petite frame",
@@ -260,7 +216,7 @@ export const dummyProducts = [
     name: "Mechanical Engineering 3rd Sem Question Papers",
     category: "Notes",
     price: 150,
-    image: [spinach_image_1],
+    image: [coin_icon],
     description: [
       "Complete set of previous year question papers",
       "Includes: Thermodynamics, Fluid Mechanics, Material Science",
@@ -282,7 +238,7 @@ export const dummyProducts = [
     name: "Data Structures Handwritten Notes",
     category: "Notes",
     price: 200,
-    image: [onion_image_1],
+    image: [coin_icon],
     description: [
       "Complete handwritten notes for Data Structures",
       "Includes: Arrays, Linked Lists, Trees, Graphs",
@@ -304,7 +260,7 @@ export const dummyProducts = [
     name: "Electrical Circuits Notes",
     category: "Notes",
     price: 180,
-    image: [apple_image],
+    image: [coin_icon],
     description: [
       "Comprehensive notes for Electrical Circuits",
       "Includes circuit diagrams and solved problems",
@@ -328,7 +284,7 @@ export const dummyProducts = [
     name: "Calculus Textbook - Stewart 8th Edition",
     category: "Textbooks",
     price: 800,
-    image: [orange_image],
+    image: [box_icon],
     description: [
       "Calculus: Early Transcendentals by James Stewart",
       "8th Edition, International Student Edition",
@@ -352,7 +308,7 @@ export const dummyProducts = [
     name: "Campus Bicycle - Hercules Geared",
     category: "Bicycles",
     price: 4500,
-    image: [banana_image_1],
+    image: [delivery_truck_icon],
     description: [
       "21-speed geared bicycle in excellent condition",
       "Perfect for campus commute",
@@ -374,7 +330,7 @@ export const dummyProducts = [
     name: "Simple Bicycle - Single Speed",
     category: "Bicycles",
     price: 2500,
-    image: [mango_image_1],
+    image: [delivery_truck_icon],
     description: [
       "Basic single-speed bicycle",
       "Good condition, minor rust on chain",
@@ -398,7 +354,7 @@ export const dummyProducts = [
     name: "Used Desk Lamp - Study Light",
     category: "Misc",
     price: 400,
-    image: [grapes_image_1],
+    image: [leaf_icon],
     description: [
       "LED desk lamp with adjustable brightness",
       "Good for late-night studying",
@@ -418,9 +374,9 @@ export const dummyAddress = [
   {
     _id: "67b5b9e54ea97f71bbc196a0",
     userId: "67b5880e4d09769c5ca61644",
-    firstName: "Great",
-    lastName: "Stack",
-    email: "user.greatstack@gmail.com",
+    firstName: "John",
+    lastName: "Doe",
+    email: "john.doe@university.edu",
     street: "Street 123",
     city: "Main City",
     state: "New State",
