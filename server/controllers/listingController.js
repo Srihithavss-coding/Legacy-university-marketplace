@@ -65,7 +65,7 @@ export const addProduct = async (req, res)=>{
 // Get Listings : /api/product/list
 export const productList = async (req, res)=>{
     try {
-        const products = await Listing.find({}).populate('sellerId', 'name email universityEmail')
+        const products = await Listing.find({status: 'ACTIVE'}).populate('sellerId', 'name email universityEmail')
         res.json({success: true, products})
     } catch (error) {
         console.log(error.message);
@@ -91,6 +91,18 @@ export const changeStock = async (req, res)=>{
         const { id, status } = req.body
         await Listing.findByIdAndUpdate(id, {status})
         res.json({success: true, message: "Status Updated"})
+    } catch (error) {
+        console.log(error.message);
+        res.json({ success: false, message: error.message })
+    }
+}
+
+// Mark Listing as Sold : /api/product/mark-sold
+export const markAsSold = async (req, res)=>{
+    try {
+        const { id } = req.body
+        await Listing.findByIdAndUpdate(id, {status: 'SOLD'})
+        res.json({success: true, message: "Listing marked as sold"})
     } catch (error) {
         console.log(error.message);
         res.json({ success: false, message: error.message })

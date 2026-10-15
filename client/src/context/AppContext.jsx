@@ -104,14 +104,20 @@ const fetchUser = async ()=>{
 
     const logout = async () => {
         try {
+            // Try to call logout endpoint if it exists
             await axios.post('/api/user/logout')
+        } catch (error) {
+            // If endpoint doesn't exist (404), proceed with client-side cleanup
+            console.log('Logout endpoint not available, performing client-side cleanup')
+        } finally {
+            // Always perform client-side cleanup
+            localStorage.removeItem('token')
             setUser(null)
             setCartItems({})
             setIsSeller(false)
+            delete axios.defaults.headers.common['token']
             toast.success('Logged out successfully')
             navigate('/')
-        } catch (error) {
-            toast.error(error.message)
         }
     }
 
