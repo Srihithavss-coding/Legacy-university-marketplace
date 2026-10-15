@@ -132,7 +132,10 @@ const ProductDetails = () => {
                 isOpen={isChatOpen}
                 onClose={() => setIsChatOpen(false)}
                 listingId={product._id}
-                sellerId={product.sellerId}
+                listingName={product.name}
+                listingImage={product.image[0]}
+                otherUserId={product.sellerId?._id || product.sellerId}
+                otherUserName={product.sellerName || 'Seller'}
             />
         </div>
     );

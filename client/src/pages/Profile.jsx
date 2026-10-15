@@ -69,8 +69,8 @@ const Profile = () => {
                     ))}
                 </div>
 
-                <button onClick={() => navigate('/my-orders')} className="mt-6 cursor-pointer px-6 py-2.5 bg-primary hover:bg-primary-dull transition text-white rounded-md">
-                    View my orders
+                <button onClick={() => navigate('/cart')} className="mt-6 cursor-pointer px-6 py-2.5 bg-primary hover:bg-primary-dull transition text-white rounded-md">
+                    View My Saved Items
                 </button>
             </div>
         </div>

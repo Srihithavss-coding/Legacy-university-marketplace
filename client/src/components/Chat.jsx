@@ -46,6 +46,8 @@ const Chat = ({ listingId, listingName, listingImage, otherUserId, otherUserName
         e.preventDefault();
         if (!newMessage.trim() || !user) return;
 
+        console.log('Sending message with receiverId:', otherUserId);
+
         try {
             const { data } = await axios.post('/api/message/send', {
                 listingId,
