@@ -26,6 +26,8 @@ const SellItem = () => {
     const [bicycleBrand, setBicycleBrand] = useState('');
     const [gearType, setGearType] = useState('');
     const [lockIncluded, setLockIncluded] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
+    const [userListings, setUserListings] = useState([]);
 
     const {axios, fetchProducts, user, navigate, setShowUserLogin} = useAppContext()
 
@@ -35,7 +37,40 @@ const SellItem = () => {
             return;
         }
         if (user?.campus) setCampus(user.campus)
+        fetchUserListings();
     }, [user, navigate, setShowUserLogin])
+
+    const fetchUserListings = async () => {
+        try {
+            const { data } = await axios.get('/api/product/list');
+            if (data.success) {
+                const myListings = data.products.filter(p => {
+                    const sellerId = typeof p.sellerId === 'object' ? p.sellerId._id : p.sellerId;
+                    return sellerId === user._id;
+                });
+                setUserListings(myListings);
+            }
+        } catch (error) {
+            console.error('Error fetching user listings:', error);
+        }
+    }
+
+    const deleteListing = async (listingId) => {
+        if (!confirm('Are you sure you want to delete this listing?')) return;
+
+        try {
+            const { data } = await axios.delete(`/api/product/delete/${listingId}`);
+            if (data.success) {
+                toast.success('Listing deleted successfully');
+                fetchUserListings();
+                fetchProducts();
+            } else {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            toast.error(error.message);
+        }
+    }
 
     const resetForm = () => {
         setName('');
@@ -62,6 +97,8 @@ const SellItem = () => {
         try {
             event.preventDefault();
 
+            if (submitting) return;
+
             if (!category) {
                 toast.error('Please select a category');
                 return;
@@ -78,6 +115,8 @@ const SellItem = () => {
                 toast.error('Please upload at least one image');
                 return;
             }
+
+            setSubmitting(true);
 
             const productData = {
                 name,
@@ -112,6 +151,7 @@ const SellItem = () => {
                 toast.success(data.message);
                 resetForm();
                 fetchProducts();
+                fetchUserListings();
                 navigate('/products');
             }else{
                 toast.error(data.message)
@@ -119,6 +159,8 @@ const SellItem = () => {
 
         } catch (error) {
             toast.error(error.message)
+        } finally {
+            setSubmitting(false);
         }
 
       }
@@ -130,16 +172,32 @@ const SellItem = () => {
                     <p className="text-base font-medium">Item Images</p>
                     <div className="flex flex-wrap items-center gap-3 mt-2">
                         {Array(4).fill('').map((_, index) => (
-                            <label key={index} htmlFor={`image${index}`}>
+                            <label key={index} htmlFor={`image${index}`} className="relative">
 
                                 <input onChange={(e)=>{
                                     const updatedFiles = [...files];
                                     updatedFiles[index] = e.target.files[0]
                                     setFiles(updatedFiles)
                                 }}
-                                type="file" id={`image${index}`} hidden />
+                                type="file" id={`image${index}`} hidden accept="image/*" />
 
-                                <img className="max-w-24 cursor-pointer" src={files[index] ? URL.createObjectURL(files[index]) : assets.upload_area} alt="uploadArea" width={100} height={100} />
+                                <div className="relative group">
+                                    <img className="max-w-24 cursor-pointer border border-gray-300 rounded" src={files[index] ? URL.createObjectURL(files[index]) : assets.upload_area} alt="uploadArea" width={100} height={100} />
+                                    {files[index] && (
+                                        <button
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                const updatedFiles = [...files];
+                                                updatedFiles[index] = null;
+                                                setFiles(updatedFiles);
+                                            }}
+                                            className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition"
+                                        >
+                                            ×
+                                        </button>
+                                    )}
+                                </div>
                             </label>
                         ))}
                     </div>
@@ -265,8 +323,43 @@ const SellItem = () => {
                          id="item-price" type="number" placeholder="0" className={fieldClass} required />
                     </div>
                 </div>
-                <button className="px-8 py-2.5 bg-primary text-white font-medium rounded cursor-pointer">List Item</button>
+                <button disabled={submitting} className="px-8 py-2.5 bg-primary text-white font-medium rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                    {submitting ? (
+                        <>
+                            <span className="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span>
+                            Listing Item...
+                        </>
+                    ) : (
+                        'List Item'
+                    )}
+                </button>
             </form>
+
+            {/* My Active Listings Section */}
+            {userListings.length > 0 && (
+                <div className="mt-8 border-t border-gray-200 pt-8">
+                    <h3 className="text-xl font-medium mb-4">My Active Listings</h3>
+                    <div className="space-y-3">
+                        {userListings.map((listing) => (
+                            <div key={listing._id} className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg">
+                                <div className="flex items-center gap-4">
+                                    <img src={listing.image[0]} alt={listing.name} className="w-16 h-16 object-cover rounded" />
+                                    <div>
+                                        <p className="font-medium text-gray-800">{listing.name}</p>
+                                        <p className="text-sm text-gray-500">₹{listing.price} · {listing.category}</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => deleteListing(listing._id)}
+                                    className="px-4 py-2 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition cursor-pointer"
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
   )
 }

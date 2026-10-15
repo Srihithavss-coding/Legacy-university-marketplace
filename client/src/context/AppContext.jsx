@@ -18,6 +18,7 @@ export const AppContextProvider = ({children})=>{
     const [isSeller, setIsSeller] = useState(false)
     const [showUserLogin, setShowUserLogin] = useState(false)
     const [products, setProducts] = useState([])
+    const [cartItems, setCartItems] = useState({})
 
     const [searchQuery, setSearchQuery] = useState({})
 
@@ -63,6 +64,57 @@ const fetchUser = async ()=>{
         }
     }
 
+    // Cart functions
+    const addToCart = (itemId) => {
+        setCartItems(prev => ({...prev, [itemId]: (prev[itemId] || 0) + 1}))
+    }
+
+    const removeFromCart = (itemId) => {
+        setCartItems(prev => {
+            const newCart = {...prev}
+            delete newCart[itemId]
+            return newCart
+        })
+    }
+
+    const getCartCount = () => {
+        return Object.values(cartItems).reduce((a, b) => a + b, 0)
+    }
+
+    const getCartAmount = () => {
+        let totalAmount = 0
+        for(const items in cartItems){
+            for(let i = 0; i < cartItems[items]; i++){
+                try {
+                    const itemInfo = products.find((product) => product._id === items)
+                    if(itemInfo) {
+                        totalAmount += itemInfo.offerPrice || itemInfo.price
+                    }
+                } catch (error) {
+                    console.error('Error calculating cart amount:', error)
+                }
+            }
+        }
+        return totalAmount
+    }
+
+    const updateCartItem = (itemId, quantity) => {
+        setCartItems(prev => ({...prev, [itemId]: quantity}))
+    }
+
+    const logout = async () => {
+        try {
+            await axios.post('/api/user/logout')
+            setUser(null)
+            setCartItems({})
+            setIsSeller(false)
+            toast.success('Logged out successfully')
+            navigate('/')
+        } catch (error) {
+            toast.error(error.message)
+        }
+    }
+
 
     useEffect(()=>{
         fetchUser()
@@ -71,7 +123,7 @@ const fetchUser = async ()=>{
     },[])
 
     const value = {navigate, user, setUser, setIsSeller, isSeller,
-        showUserLogin, setShowUserLogin, products, currency, searchQuery, setSearchQuery, axios, fetchProducts
+        showUserLogin, setShowUserLogin, products, currency, searchQuery, setSearchQuery, axios, fetchProducts, cartItems, addToCart, removeFromCart, getCartCount, getCartAmount, updateCartItem, logout
     }
 
     return <AppContext.Provider value={value}>

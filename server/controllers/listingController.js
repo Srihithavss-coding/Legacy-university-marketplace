@@ -42,8 +42,8 @@ export const addProduct = async (req, res)=>{
                     return result.secure_url
                 } catch (error) {
                     console.log('Cloudinary upload failed, using fallback placeholder:', error.message);
-                    // Fallback placeholder for local testing
-                    return 'https://via.placeholder.com/300x300/2563eb/ffffff?text=No+Image';
+                    // Fallback placeholder for local testing - clean blue box with icon
+                    return 'https://via.placeholder.com/400x400/2563eb/ffffff?text=Product+Image';
                 }
             })
         )
@@ -91,6 +91,18 @@ export const changeStock = async (req, res)=>{
         const { id, status } = req.body
         await Listing.findByIdAndUpdate(id, {status})
         res.json({success: true, message: "Status Updated"})
+    } catch (error) {
+        console.log(error.message);
+        res.json({ success: false, message: error.message })
+    }
+}
+
+// Delete Listing : /api/product/delete/:id
+export const deleteListing = async (req, res)=>{
+    try {
+        const { id } = req.params
+        await Listing.findByIdAndDelete(id)
+        res.json({success: true, message: "Listing deleted successfully"})
     } catch (error) {
         console.log(error.message);
         res.json({ success: false, message: error.message })

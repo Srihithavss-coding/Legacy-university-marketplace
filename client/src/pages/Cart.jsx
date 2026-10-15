@@ -116,18 +116,10 @@ const Cart = () => {
                                 <p className="hidden md:block font-semibold">{product.name}</p>
                                 <div className="font-normal text-gray-500/70">
                                     <p>Condition: <span>{product.condition || "N/A"}</span></p>
-                                    <div className='flex items-center'>
-                                        <p>Qty:</p>
-                                        <select onChange={e => updateCartItem(product._id, Number(e.target.value))}  value={cartItems[product._id]} className='outline-none'>
-                                            {Array(cartItems[product._id] > 9 ? cartItems[product._id] : 9).fill('').map((_, index) => (
-                                                <option key={index} value={index + 1}>{index + 1}</option>
-                                            ))}
-                                        </select>
-                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <p className="text-center">{currency}{product.offerPrice * product.quantity}</p>
+                        <p className="text-center">{currency}{product.price}</p>
                         <button onClick={()=> removeFromCart(product._id)} className="cursor-pointer mx-auto">
                             <img src={assets.remove_icon} alt="remove" className="inline-block w-6 h-6" />
                         </button>
@@ -165,35 +157,21 @@ const Cart = () => {
                             </div>
                         )}
                     </div>
-
-                    <p className="text-sm font-medium uppercase mt-6">Payment Method</p>
-
-                    <select onChange={e => setPaymentOption(e.target.value)} className="w-full border border-gray-300 bg-white px-3 py-2 mt-2 outline-none">
-                        <option value="COD">Cash On Pickup</option>
-                        <option value="Online">Online Payment</option>
-                    </select>
                 </div>
 
                 <hr className="border-gray-300" />
 
                 <div className="text-gray-500 mt-4 space-y-2">
                     <p className="flex justify-between">
-                        <span>Price</span><span>{currency}{getCartAmount()}</span>
-                    </p>
-                    <p className="flex justify-between">
-                        <span>Shipping Fee</span><span className="text-blue-600">Free</span>
-                    </p>
-                    <p className="flex justify-between">
-                        <span>Tax (2%)</span><span>{currency}{getCartAmount() * 2 / 100}</span>
+                        <span>Subtotal</span><span>{currency}{getCartAmount()}</span>
                     </p>
                     <p className="flex justify-between text-lg font-medium mt-3">
-                        <span>Total Amount:</span><span>
-                            {currency}{getCartAmount() + getCartAmount() * 2 / 100}</span>
+                        <span>Total Amount:</span><span>{currency}{getCartAmount()}</span>
                     </p>
                 </div>
 
                 <button onClick={placeOrder} className="w-full py-3 mt-6 cursor-pointer bg-primary text-white font-medium hover:bg-primary-dull transition">
-                    {paymentOption === "COD" ? "Request Item" : "Proceed to Checkout"}
+                    Request Item
                 </button>
             </div>
         </div>

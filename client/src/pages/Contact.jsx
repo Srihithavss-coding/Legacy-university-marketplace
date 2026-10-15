@@ -1,6 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
+import toast from 'react-hot-toast'
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: 'General Inquiry',
+    message: ''
+  })
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    // In production, this would send to an API endpoint
+    console.log('Feedback submitted:', formData)
+    toast.success('Thank you for your feedback! We\'ll get back to you soon.')
+    setFormData({ name: '', email: '', subject: 'General Inquiry', message: '' })
+  }
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
   return (
     <div className='mt-16 pb-16'>
       <h1 className='text-3xl md:text-4xl font-medium mb-6'>Contact Us</h1>
@@ -29,32 +49,62 @@ const Contact = () => {
         </div>
 
         <div className='bg-gray-50 p-6 rounded-lg'>
-          <h2 className='text-xl font-medium mb-4'>Send us a Message</h2>
-          <form className='space-y-4'>
+          <h2 className='text-xl font-medium mb-4'>Send Us Feedback / Report an Issue</h2>
+          <form onSubmit={handleSubmit} className='space-y-4'>
             <div>
               <label className='block text-sm font-medium text-gray-700 mb-1'>Name</label>
-              <input type='text' className='w-full px-3 py-2 border border-gray-300 rounded outline-none focus:border-primary' placeholder='Your name' />
+              <input
+                type='text'
+                name='name'
+                value={formData.name}
+                onChange={handleChange}
+                className='w-full px-3 py-2 border border-gray-300 rounded outline-none focus:border-primary'
+                placeholder='Your name'
+                required
+              />
             </div>
             <div>
               <label className='block text-sm font-medium text-gray-700 mb-1'>Email</label>
-              <input type='email' className='w-full px-3 py-2 border border-gray-300 rounded outline-none focus:border-primary' placeholder='your.email@university.edu' />
+              <input
+                type='email'
+                name='email'
+                value={formData.email}
+                onChange={handleChange}
+                className='w-full px-3 py-2 border border-gray-300 rounded outline-none focus:border-primary'
+                placeholder='your.email@university.edu'
+                required
+              />
             </div>
             <div>
               <label className='block text-sm font-medium text-gray-700 mb-1'>Subject</label>
-              <select className='w-full px-3 py-2 border border-gray-300 rounded outline-none focus:border-primary'>
+              <select
+                name='subject'
+                value={formData.subject}
+                onChange={handleChange}
+                className='w-full px-3 py-2 border border-gray-300 rounded outline-none focus:border-primary'
+              >
                 <option>General Inquiry</option>
                 <option>Buying Help</option>
                 <option>Selling Help</option>
                 <option>Technical Issue</option>
                 <option>Report a Problem</option>
+                <option>Safety Concern</option>
               </select>
             </div>
             <div>
               <label className='block text-sm font-medium text-gray-700 mb-1'>Message</label>
-              <textarea rows='4' className='w-full px-3 py-2 border border-gray-300 rounded outline-none focus:border-primary' placeholder='How can we help you?'></textarea>
+              <textarea
+                name='message'
+                value={formData.message}
+                onChange={handleChange}
+                rows='4'
+                className='w-full px-3 py-2 border border-gray-300 rounded outline-none focus:border-primary'
+                placeholder='How can we help you?'
+                required
+              ></textarea>
             </div>
             <button type='submit' className='w-full py-3 bg-primary text-white font-medium hover:bg-primary-dull transition cursor-pointer rounded'>
-              Send Message
+              Send Feedback
             </button>
           </form>
         </div>
